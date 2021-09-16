@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+  type="win32"
+  name="Your App Name"
+  version="1.0.0.0" />
+
+<!-- This dependency node is the key to support our registration-free components -->
+<dependency>
+  <dependentAssembly>
+    <assemblyIdentity
+      type="win32"
+      name="ScnLib.DLLs"
+      version="1.0.0.0" />
+  </dependentAssembly>
+</dependency>
+<!-- Please copy the node block above and insert it into your EXE's manifest file -->
+
+</assembly>

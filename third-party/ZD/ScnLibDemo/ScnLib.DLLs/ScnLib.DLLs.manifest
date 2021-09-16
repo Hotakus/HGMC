@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+    type="win32"
+    name="ScnLib.DLLs"
+    version="1.0.0.0" />
+
+<file name="ScnLib.dll" />
+<file name="libmp4v2.dll" />
+
+<file name="ScnCap.ax">
+    <comClass
+        description="ZD Soft Screen Capture"
+        clsid="{7E53EBDB-0F5E-4F26-B2DF-6B2A0A19DB6A}"
+        threadingModel="Both" />
+</file>
+
+<file name="AudCap.ax">
+    <comClass
+        description="ZD Soft Audio Capture"
+        clsid="{CAC963E2-D076-463D-93FB-C9019CBA4F22}"
+        threadingModel="Both" />
+</file>
+
+<file name="AacEnc.ax">
+    <comClass
+        description="ZD Soft AAC Encoder"
+        clsid="{881BD039-3D89-46BC-B4BE-E712A2E3B623}"
+        threadingModel="Both" />
+</file>
+
+<file name="AvcEnc.ax">
+    <comClass
+        description="ZD Soft AVC Encoder"
+        clsid="{F1BEF98A-8768-4BAC-8929-BEB0A0CFA688}"
+        threadingModel="Both" />
+</file>
+
+<file name="Mp4Mux.ax">
+    <comClass
+        description="ZD Soft MP4 Muxer"
+        clsid="{D56077EE-2806-49FF-A797-2865D247928D}"
+        threadingModel="Both" />
+</file>
+
+<file name="FlvMux.ax">
+    <comClass
+        description="ZD Soft FLV Muxer"
+        clsid="{76301A48-AF7E-49F6-BC7F-B47C064F9055}"
+        threadingModel="Both" />
+</file>
+
+<file name="Stream.ax">
+    <comClass
+        description="ZD Soft Streaming Module"
+        clsid="{926F01FB-79CB-4626-A1F2-C779D60AC8E7}"
+        threadingModel="Both" />
+</file>
+
+<file name="Webcam.ax">
+    <comClass
+        description="ZD Soft Webcam Agent"
+        clsid="{6AFBCCCD-59DA-4933-B122-AADB6AB91AC2}"
+        threadingModel="Both" />
+</file>
+
+<file name="wavdest.ax">
+    <comClass
+        description="WAV Dest"
+        clsid="{3C78B8E2-6C4D-11D1-ADE2-0000F8754B99}"
+        threadingModel="Both" />
+</file>
+
+<file name="lame.ax">
+    <comClass
+        description="LAME Audio Encoder"
+        clsid="{B8D27088-FF5F-4B7C-98DC-0E91A1696286}"
+        threadingModel="Both" />
+    <comClass
+        description="LAME Audio Encoder Property Page"
+        clsid="{B8D27089-FF5F-4B7C-98DC-0E91A1696286}"
+        threadingModel="Both" />
+    <comClass
+        description="LAME Audio Encoder Property Page"
+        clsid="{B8D2708A-FF5F-4B7C-98DC-0E91A1696286}"
+        threadingModel="Both" />
+    <comClass
+        description="LAME Audio Encoder About"
+        clsid="{FE69EDD1-F4CB-11D5-994A-000021D1FE2F}"
+        threadingModel="Both" />
+</file>
+
+</assembly>

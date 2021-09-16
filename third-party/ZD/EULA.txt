@@ -1,0 +1,85 @@
+END USER LICENSE AGREEMENT
+
+IMPORTANT: THIS IS A LICENSE, NOT A SALE
+
+This End User License Agreement (the "Agreement") is made by and between you (the "Licensee") and Shenzhen ZD Soft Co., Ltd. ("ZD Soft").
+
+THIS DOCUMENT DESCRIBES A CONTRACT BETWEEN YOU AND ZD SOFT. PLEASE READ IT CAREFULLY BEFORE USING ZD SOFT SCREEN RECORDER SDK (THE "SDK"). BY USING THE SDK YOU INDICATE YOUR ACCEPTANCE OF THIS AGREEMENT. IF YOU DO NOT AGREE, DO NOT USE THE SDK.
+
+Whereas, ZD Soft is the developer and the copyright owner of the SDK, which provides a set of Application Programming Interface ("API") that implements the features of recording computer real-time screen and sound into video files in software way;
+
+Whereas, Licensee wishes to use the SDK to develop software applications in need of screen recording features conveniently and quickly (the "Licensee Software"); and
+
+Whereas, Licensee wishes to receive, and ZD Soft wishes to disclose to Licensee, the SDK, and other information as deemed appropriate by ZD Soft, all on the terms set forth herein;
+
+Now, therefore, in consideration of the mutual promises made herein, the parties agree as follows:
+
+1.License.
+
+1.1	Trial License. Once Licensee downloads the SDK from ZD Soft's website and starts to use it for free, ZD Soft hereby grants Licensee a worldwide, nonexclusive, royalty-free, terminable, nontransferable license to:
+
+(a)	copy the SDK and call the APIs of the SDK in Dynamic Link Library ("DLL") form on unlimited number of devices of Licensee, solely to test and evaluate the features of the SDK.
+
+1.2	Commercial License. Once Licensee pays ZD Soft the commercial licensing fee for the SDK, ZD Soft hereby grants Licensee a worldwide, nonexclusive, royalty-free, terminable, nontransferable license to:
+
+(a)	copy the SDK and call the APIs of the SDK in Dynamic Link Library ("DLL") form on unlimited number of devices of Licensee, solely to develop Licensee Software in unlimited number of projects; and
+
+(b)	reproduce and distribute the part of the SDK provided inside the folder named ScnLib.DLLs and ScnLibX (the "SDK Redistributables") along with Licensee Software in object code form to unlimited number of devices.
+
+1.3 The Licensee will not (and has no right to):
+
+(a) work around any technical limitations in the SDK that only allow Licensee to use it in certain ways;
+
+(b) reverse engineer, decompile or disassemble the SDK;
+
+(c) remove, minimize, block, or modify any information such as copyright notices, trademarks, logos, watermarks, URLs of ZD Soft or its suppliers in the SDK;
+
+(d) use the SDK in any way that is against the law or to create or propagate malware;
+
+(e) share, publish, or lend the SDK (except for the SDK Redistributables subject to the applicable terms above); or 
+
+(f) bundle, wrap, or expand the SDK as Licensee's own software development kit (the "Licensee SDK") for any third party to use for any purpose.
+
+1.4	Updates. ZD Soft may from time to time, in its sole discretion, provide updates, error corrections, and future versions of the SDK on its website. The Licensee may from time to time, in its sole discretion, download updates, error corrections, and future versions of the SDK from ZD Soft's website for free. Such updates, error corrections and future versions shall be deemed part of the SDK, as applicable, under this Agreement.
+
+1.5	Reservation of Rights. The SDK is licensed, not sold. ZD Soft reserves all rights not explicitly granted herein.
+
+2. Ancillary Obligations.
+
+2.1 Services. ZD Soft provides free pre-sale tech support and 90-day free after-sale tech support via emails or instant messaging tools.
+
+2.2	Indemnity. Licensee hereby agrees that it is solely responsible for any and all Licensee Software and Licensee's creation, distribution, and promotion thereof. Licensee shall defend, indemnify, and hold harmless ZD Soft, its officers, directors, employees and agents against any and all claims, damages (including reasonable attorneys' fees and costs), losses, or liabilities whatsoever arising out of Licensee's creation, distribution, or promotion of Licensee Software.
+
+2.3	Trademarks. Licensee acknowledges and agrees that this Agreement does not grant Licensee any right to use any trademarks or trade names of ZD Soft or its licensors. All such marks shall remain the property of the respective owner. Licensee will refrain from any action or communication that can be incorrectly interpreted as a cooperation or partnership between ZD Soft and Licensee.
+
+2.4 No Refund. Once Licensee pays ZD Soft the commercial licensing fee for the SDK that indicates Licensee has fully tested the SDK and concluded the SDK meets Licensee's commercial use requirements, and Licensee will not request a refund for any reason.
+
+3.Term.
+
+3.1	Term. This Agreement shall become effective as of the date Licensee downloads or installs the SDK. It will continue to apply until terminated by either ZD Soft or Licensee as set out below.
+
+3.2	Termination. ZD Soft may terminate this Agreement immediately upon written (including email) notice to Licensee. Licensee may terminate this Agreement at any time by ceasing Licensee's use of the SDK and ending Licensee's distribution of Licensee Software created using the SDK. Furthermore, the Agreement will terminate automatically upon Licensee's breach of any term of this Agreement.
+
+3.3	Survival. Sections 1.3, 1.5, 2, 3.2, 3.3, and 4-6 shall survive any expiration or termination of this Agreement.
+
+4.Disclaimer of Warranties; Limitation of Liability	
+
+4.1	NO WARRANTIES. THE SDK AND ANY OTHER MATERIAL DOWNLOADED BY LICENSEE IS PROVIDED "AS IS". ZD SOFT AND ITS SUPPLIERS DISCLAIM ALL WARRANTIES WITH RESPECT TO THE SDK, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, NON-INFRINGEMENT, TITLE AND FITNESS FOR A PARTICULAR PURPOSE.
+
+4.2	LIMITATION OF LIABILITY. IN NO EVENT SHALL ZD SOFT OR ITS SUPPLIERS BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS, BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR ANY OTHER PECUNIARY LOSS) ARISING OUT OF THE USE OF OR INABILITY TO USE THE SDK, EVEN IF ZD SOFT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+5.No Exclusivity.
+
+Neither this Agreement nor the disclosure or receipt of Information shall constitute or imply any promise to or intention to make any purchase of products or services by either party or its affiliated companies or any commitment by either party or its affiliated companies with respect to the present or future marketing of any product or service or any commitment to enter into any other business relationship. Except for the license and use restrictions expressly set forth herein, each party will be free (1) to pursue, negotiate, and enter into similar relationships with third parties and (2) to develop, market, and make available similar products and services. Neither party will be obligated to enter into any other agreement with the other party by virtue of this Agreement.
+
+6.General.
+
+6.1	Modification. No amendment or modification of this Agreement shall be valid or binding on the parties unless made in writing and signed on behalf of both of the parties by their respective duly authorized officers or representatives.
+
+6.2	Assignment. Licensee may not assign this agreement without the prior written consent of ZD Soft. Subject to the limitations set forth in this Agreement, this Agreement will inure to the benefit of and be binding upon the parties, their successors and assigns.
+
+6.3	Severability. If any provision of this Agreement shall be held by a court of competent jurisdiction to be illegal, invalid or unenforceable, the remaining provisions shall remain in full force and effect.
+
+6.4	Governing Law, Jurisdiction and Venue. This Agreement shall be governed by the laws of People's Republic of China. For any claims of any kind arising out of this Agreement or use of the SDK, each of the parties hereto submits to exclusive jurisdiction and venue in the People's Court Of Nanshan District, Shenzhen, China.
+
+6.5	Entire Agreement. This Agreement constitutes the entire understanding between the parties hereto and supersedes all previous communications, representations and understandings, oral or written, between the parties, with respect to the subject matter of this Agreement.
