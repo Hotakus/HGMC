@@ -1,11 +1,89 @@
-﻿<Window x:Class="HGMC.MainWindow"
+<Window x:Class="HGMC.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:HGMC"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800"
-        Background="WhiteSmoke ">
+        Title="HGMC by Hotakus" Height="410" Width="610"
+        Background="Transparent"
+        MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        materialDesign:ShadowAssist.ShadowDepth="Depth3" 
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        >
+
+    <materialDesign:Card
+        materialDesign:ShadowAssist.ShadowDepth="Depth5"
+        materialDesign:ShadowAssist.Darken="True"
+        Background="WhiteSmoke"
+        >
+        <Grid ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" Name="ctlBtnRow" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Background="Teal">
+                <TextBlock HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center"
+                       Foreground="WhiteSmoke">
+                HGMC
+                </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Grid.Row="0" x:Name="minimizeBtn" 
+                        HorizontalAlignment="Right" VerticalAlignment="Top" 
+                        Width="Auto" Height="30"
+                        Margin="0 0 0 0"
+                        Click="minimizeBtn_Click"
+                        Style="{DynamicResource MaterialDesignFlatButton}"
+                        Foreground="WhiteSmoke"
+                        >
+                        <materialDesign:PackIcon Kind="WindowMinimize" />
+                    </Button>
+                    <Button Grid.Row="0" x:Name="closeBtn" 
+                        HorizontalAlignment="Right" VerticalAlignment="Top" 
+                        Width="Auto" Height="30"
+                        Click="closeBtn_Click"
+                        Style="{DynamicResource MaterialDesignFlatButton}"
+                        Foreground="WhiteSmoke"
+                        >
+                        <materialDesign:PackIcon Kind="Close" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="1" x:Name="ScreenCaptureArea" >
+                <Image x:Name="scrCapImg" Height="Auto" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" x:Name="mainCtlArea" Height="70">
+                <Button x:Name="test" Click="test_Click" >Click</Button>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="3" Height="300" x:Name="HardwareArea" VerticalScrollBarVisibility="Auto"
+                      PreviewMouseWheel="HardwareArea_PreviewMouseWheel">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <materialDesign:Card Grid.Row="0" Width="100" Height="100"></materialDesign:Card>
+                    <materialDesign:Card Grid.Row="1" Width="100" Height="100"></materialDesign:Card>
+
+                </Grid>
+            </ScrollViewer>
+
+        </Grid>
+    </materialDesign:Card>
+
 
 </Window>
