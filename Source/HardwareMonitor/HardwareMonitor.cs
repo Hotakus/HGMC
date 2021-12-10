@@ -40,7 +40,7 @@ namespace HGMC.Source.HardwareMonitor
     private readonly UpdateVisitor _updateVisitor = new UpdateVisitor();
 
     public Mutex _packMutex = new Mutex(true);
-    
+
     public HardwareMonitor()
     {
       Console.WriteLine("Hardware Monitor");
@@ -57,7 +57,6 @@ namespace HGMC.Source.HardwareMonitor
       };
 
       _computer.Open();
-      
     }
 
     ~HardwareMonitor()
@@ -281,8 +280,9 @@ namespace HGMC.Source.HardwareMonitor
           {
             var hdData = new HardDiskData
             {
-              name = (hardware.Name == "" ? 
-                "Nameless Hard Disk #" + hardwareJsonPack.Data.HardDisk.count : hardware.Name)
+              name = (hardware.Name == ""
+                ? "Nameless Hard Disk #" + hardwareJsonPack.Data.HardDisk.count
+                : hardware.Name)
             };
 
             foreach (var sensor in hardware.Sensors)

@@ -145,8 +145,8 @@ namespace HGMC
       });
 
       showThread.Start();
-      
-      
+
+
       notifyIcon.BalloonTipText = "HGMC运行中..."; //托盘气泡显示内容
       notifyIcon.Text = "HGMC";
       notifyIcon.Visible = true; //托盘按钮是否可见
@@ -158,7 +158,6 @@ namespace HGMC
       var childen = new System.Windows.Forms.MenuItem[] { exit };
       notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
       this.StateChanged += MainWindow_StateChanged;
-      
     }
 
     /// <summary>
@@ -191,6 +190,7 @@ namespace HGMC
     }
 
     NotifyIcon notifyIcon = new NotifyIcon();
+
     private void minimizeBtn_Click(object sender, RoutedEventArgs e)
     {
       this.Visibility = Visibility.Hidden;

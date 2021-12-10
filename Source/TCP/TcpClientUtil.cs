@@ -99,7 +99,19 @@ namespace HGMC.Source.TCP
 
     public bool SendMsg(string msg)
     {
-      _binaryWriter?.Write(msg.ToCharArray());
+      if (this.Connected() == false)
+        return false;
+
+      try
+      {
+        _binaryWriter?.Write(msg.ToCharArray());
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        return false;
+      }
+
       return true;
     }
 
@@ -113,11 +125,13 @@ namespace HGMC.Source.TCP
           Thread.Sleep(10);
           continue;
         }
+
         ReceiveMsg();
         if (MsgCount() != 0)
         {
           Console.WriteLine(GetMsg());
         }
+
         Thread.Sleep(10);
       }
     }
@@ -141,6 +155,7 @@ namespace HGMC.Source.TCP
         tmp = _msgQueue[0];
         _msgQueue.RemoveAt(0);
       }
+
       return tmp;
     }
   }
