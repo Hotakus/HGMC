@@ -13,24 +13,12 @@ namespace HGMC
   /// </summary>
   public partial class App
   {
-    public void Test()
-    {
-      // var hardwareMonitor = new HardwareMonitor();
-      // var txt = hardwareMonitor.UpdateHardware();
-      // //Console.WriteLine(txt);
-
-      // var tcu = new TcpClientUtil();
-      // tcu.SetServerParams("10.88.171.96", 8080);
-      // tcu.Connect();
-
-      // tcu.SendMsg("Hello, I am HellGateMonitor's TCP");
-      // tcu.SendMsg(txt);
-
-      //new Thread(() => { tcu.ReceiveMsgThread(); }).Start();
-    }
+    
 
     public App()
     {
+      
+
       
     }
   }

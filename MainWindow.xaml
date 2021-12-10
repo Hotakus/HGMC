@@ -6,83 +6,181 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:HGMC"
         mc:Ignorable="d"
-        Title="HGMC by Hotakus" Height="410" Width="610"
+        Title="HGMC by Hotakus" Height="370" Width="650"
         Background="Transparent"
         MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
         ResizeMode="NoResize"
         WindowStyle="None"
-        materialDesign:ShadowAssist.ShadowDepth="Depth3" 
+        materialDesign:ShadowAssist.ShadowDepth="Depth3"
         WindowStartupLocation="CenterScreen"
-        AllowsTransparency="True"
-        >
+        AllowsTransparency="True">
 
     <materialDesign:Card
-        materialDesign:ShadowAssist.ShadowDepth="Depth5"
-        materialDesign:ShadowAssist.Darken="True"
-        Background="WhiteSmoke"
-        >
-        <Grid ShowGridLines="True">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" Name="ctlBtnRow" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        materialDesign:ShadowAssist.ShadowDepth="Depth5">
+        <TabControl
+            Width="650"
+            Style="{StaticResource MaterialDesignNavigatilRailTabControl}">
+            
+            <!--Screenshot-->
+            <TabItem
+                Header="{materialDesign:PackIcon Kind=MonitorScreenshot, Size=35}"
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <materialDesign:Card
+                    Background="WhiteSmoke">
+                    <Grid ShowGridLines="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" Name="ctlBtnRow" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Background="Teal">
-                <TextBlock HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center"
-                       Foreground="WhiteSmoke">
-                HGMC
+                        <StackPanel Grid.Row="1" x:Name="ScreenCaptureArea">
+                            <Image x:Name="ScrCapImg" Height="343" Width="610" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" x:Name="MainCtlArea" Height="30" Width="Auto"
+                                    Orientation="Horizontal">
+                            <Button x:Name="SwBtn" Click="sr_Click">开始投屏</Button>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+            </TabItem>
+
+            <!--Monitor-->
+            <TabItem
+                Header="{materialDesign:PackIcon Kind=GaugeLow, Size=35}"
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                <TextBlock x:Name="testt">
+                    <Run
+                        Text="tab 2 content. Default look and behaviors." />
+                    <LineBreak />
+                    <LineBreak />
+                    <Run
+                        FontStyle="Italic">
+                        Praesent sed dui arcu. Vivamus porta auctor sagittis
+                    </Run>
+
+                    <Button x:Name="Monitor" Click="Monitor_Click">开始投屏</Button>
                 </TextBlock>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Grid.Row="0" x:Name="minimizeBtn" 
-                        HorizontalAlignment="Right" VerticalAlignment="Top" 
-                        Width="Auto" Height="30"
-                        Margin="0 0 0 0"
-                        Click="minimizeBtn_Click"
-                        Style="{DynamicResource MaterialDesignFlatButton}"
-                        Foreground="WhiteSmoke"
-                        >
-                        <materialDesign:PackIcon Kind="WindowMinimize" />
-                    </Button>
-                    <Button Grid.Row="0" x:Name="closeBtn" 
-                        HorizontalAlignment="Right" VerticalAlignment="Top" 
-                        Width="Auto" Height="30"
-                        Click="closeBtn_Click"
-                        Style="{DynamicResource MaterialDesignFlatButton}"
-                        Foreground="WhiteSmoke"
-                        >
-                        <materialDesign:PackIcon Kind="Close" />
-                    </Button>
-                </StackPanel>
-            </Grid>
+            </TabItem>
 
-            <StackPanel Grid.Row="1" x:Name="ScreenCaptureArea" >
-                <Image x:Name="scrCapImg" Height="Auto" Width="Auto" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </StackPanel>
+            <!--Setting-->
+            <TabItem
+                Header="{materialDesign:PackIcon Kind=Cog, Size=35}"
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                
+                <materialDesign:Card
+                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                    Padding="32"
+                    >
+                    
+                    <TextBlock>
+                        <Run
+                            Text="tab 2 content. Default look and behaviors." />
+                        <LineBreak />
+                        <LineBreak />
+                        <Run
+                            FontStyle="Italic">
+                            Praesent sed dui arcu. Vivamus porta auctor sagittis
+                        </Run>
 
-            <StackPanel Grid.Row="2" x:Name="mainCtlArea" Height="70">
-                <Button x:Name="test" Click="test_Click" >Click</Button>
-            </StackPanel>
+                        <Button  Click="Monitor_Click">开始投屏</Button>
+                    </TextBlock>
+                    
+                </materialDesign:Card>
 
-            <ScrollViewer Grid.Row="3" Height="300" x:Name="HardwareArea" VerticalScrollBarVisibility="Auto"
-                      PreviewMouseWheel="HardwareArea_PreviewMouseWheel">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
+            </TabItem>
 
-                    <materialDesign:Card Grid.Row="0" Width="100" Height="100"></materialDesign:Card>
-                    <materialDesign:Card Grid.Row="1" Width="100" Height="100"></materialDesign:Card>
+            <!--Helper-->
+            <TabItem
+                Header="{materialDesign:PackIcon Kind=InformationVariant, Size=35}"
+                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
 
-                </Grid>
-            </ScrollViewer>
+                <ScrollViewer Height="350" x:Name="HardwareArea" VerticalScrollBarVisibility="Auto"
+                              PreviewMouseWheel="HardwareArea_PreviewMouseWheel">
+                    <StackPanel Margin="10 10 10 10">
+                        <TextBlock>
+                            <Run FontSize="30"
+                                 Text="项目信息" />
+                            <LineBreak />
+                        </TextBlock>
 
-        </Grid>
+                        <TextBlock>
+                            <Run FontSize="15"
+                                 Text="项目地址：" />
+                            <TextBlock FontSize="15">
+                                <Hyperlink NavigateUri="https://github.com/Hotakus/HGMC"
+                                           Click="Hyperlink_Click">
+                                    https://github.com/Hotakus/HGMC
+                                </Hyperlink>
+                            </TextBlock>
+                            <LineBreak></LineBreak>
+                        </TextBlock>
+
+                        <TextBlock>
+                            <Run FontSize="20"
+                                 Text="项目使用介绍：" />
+                            <LineBreak />
+
+                            <TextBlock FontSize="15">
+                                看到左侧的导航栏，有五个按钮，其中，从上到下第一个投屏按钮；
+                                <LineBreak />
+                                第二个是硬件监控按钮；
+                                <LineBreak />
+                                第三个是设置按钮，可以用来设置如HGM的IP地址、端口等；
+                                <LineBreak />
+                                第四个是额外信息，即本界面；
+                                <LineBreak />
+                                最后一个是功能按钮，
+                                右单击时最小化到托盘，左单击时退出软件。
+                                <LineBreak />
+                                <LineBreak />
+                                使用项目时，要先进入设置界面进行配置和连接，连接成功后
+                                <LineBreak />
+                                才能使用“硬件监控功能”和“投屏功能”
+                                <LineBreak />
+                                <LineBreak />
+                                若HGM在Misc界面时（就是显示天气和时间和B站信息的界面），因为
+                                <LineBreak />
+                                单片机硬件资源有限， 为了项目的正常运行，TCP连接会断开以腾出更多资源，
+                                <LineBreak />
+                                即当HGM打开Misc界面后，若想使用“硬件监控功能”和“投屏功能”，则需要进入
+                                <LineBreak />
+                                设置界面重新连接HGM。
+                            </TextBlock>
+
+                            <LineBreak />
+                            <LineBreak />
+
+                            <Run FontSize="15"
+                                 Text="我的Github：" />
+                            <TextBlock FontSize="15">
+                                <Hyperlink NavigateUri="https://github.com/Hotakus"
+                                           Click="Hyperlink_Click">
+                                    https://github.com/Hotakus
+                                </Hyperlink>
+                            </TextBlock>
+                            <LineBreak />
+                            <Run FontSize="15"
+                                 Text="我的邮箱：" />
+                            <TextBlock FontSize="15">
+                                hotakus@foxmail.com
+                            </TextBlock>
+
+                        </TextBlock>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!--Function-->
+            <TabItem PreviewMouseLeftButtonDown="closeBtn_Click"
+                     MouseRightButtonDown="minimizeBtn_Click"
+                     Header="{materialDesign:PackIcon Kind=ExitRun, Size=35}"
+                     Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+            </TabItem>
+        </TabControl>
     </materialDesign:Card>
 
 

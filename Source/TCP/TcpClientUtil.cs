@@ -108,6 +108,11 @@ namespace HGMC.Source.TCP
       Console.WriteLine("ReceiveMsgThread");
       while (true)
       {
+        if (this.Connected() == false)
+        {
+          Thread.Sleep(10);
+          continue;
+        }
         ReceiveMsg();
         if (MsgCount() != 0)
         {
