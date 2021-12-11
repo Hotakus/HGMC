@@ -56,14 +56,24 @@ namespace HGMC.Source.HardwareMonitor
         IsStorageEnabled = true
       };
 
-      _computer.Open();
+      
     }
 
     ~HardwareMonitor()
     {
-      _computer.Close();
+      
     }
 
+    public void Begin()
+    {
+      _computer.Open();
+    }
+
+    public void End()
+    {
+      _computer.Close();
+    }
+    
     public string UpdateHardware()
     {
       _computer.Accept(_updateVisitor);
@@ -175,8 +185,11 @@ namespace HGMC.Source.HardwareMonitor
             {
               if (sensor.SensorType == SensorType.Load)
               {
-                hardwareJsonPack.Data.Memory.load.current = FloatConvert(sensor.Value ?? 0, 2);
-                hardwareJsonPack.Data.Memory.load.max = FloatConvert(sensor.Max ?? 0, 2);
+                if (sensor.Name == "Memory")
+                {
+                  hardwareJsonPack.Data.Memory.load.current = FloatConvert(sensor.Value ?? 0, 2);
+                  hardwareJsonPack.Data.Memory.load.max = FloatConvert(sensor.Max ?? 0, 2);
+                }
                 continue;
               }
 
