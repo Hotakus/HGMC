@@ -2,8 +2,10 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -18,7 +20,13 @@ using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using HGMC.Source;
+using LiveCharts;
+using LiveCharts.Wpf;
+using Newtonsoft.Json;
+using static System.String;
 using Image = System.Drawing.Image;
+using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using MouseEventHandler = System.Windows.Input.MouseEventHandler;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
@@ -39,7 +47,7 @@ namespace HGMC
     /// <returns>Bitmap</returns>
     public static Bitmap Capture(Rect rect)
     {
-      var bitmap = new Bitmap((int)rect.Width, (int)rect.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+      var bitmap = new Bitmap((int)rect.Width, (int)rect.Height, System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
 
       var graphics = Graphics.FromImage((Image)bitmap);
       var x = (int)rect.X;
@@ -91,8 +99,14 @@ namespace HGMC
     private static MemoryStream _imgMemory;
     private static BitmapSource _imageBitmapSource;
     private static Bitmap _imageBitmap;
-    private static Image _image;
     private Thread _captureThread = new Thread(capture_thread);
+    private static ImageFormat _imageFormat = ImageFormat.Jpeg;
+    private static ImageFormat _imageFormat2;
+    private static PixelFormat _pixelFormat;
+
+    private static int _length = 0;
+    private static long _length1 = 0;
+    private static int _length2 = 0;
 
     /// <summary>
     /// capture_thread
@@ -103,18 +117,23 @@ namespace HGMC
       {
         var rect = new Rect(0, 0, ScreenWidth, ScreenHeight);
         _imageBitmap = MyCapture.Capture(rect);
-        _imgMemory = MyCapture.SaveBitMapToMemoryStream(_imageBitmap, ImageFormat.Jpeg, new Size(SrWidth, SrHeight));
+        _imgMemory = MyCapture.SaveBitMapToMemoryStream(_imageBitmap, _imageFormat, new Size(SrWidth, SrHeight));
         _imageBitmapSource = _imageBitmap.ToBitmapSource();
         //_imageBitmapSource = Screenshot.CaptureRegion(rect);
         Thread.Sleep(10);
+        _length = _imgMemory.Capacity;
+        _length1 = _imgMemory.Length;
+
+        _imageFormat2 = _imageBitmap.RawFormat;
+        _pixelFormat = _imageBitmap.PixelFormat;
       }
       // ReSharper disable once FunctionNeverReturns
     }
 
-    public static HardwareMonitor HardwareMonitor;
+    private static readonly HardwareMonitor HardwareMonitor = new HardwareMonitor();
     private static TcpClientUtil _tcu = new TcpClientUtil();
-    public static Thread Tcur = new Thread(() => { _tcu.ReceiveMsgThread(); });
-    public static Thread Tcuw;
+    public static Thread Tcur = null;
+    public static Thread Tcuw = null;
 
     /// <summary>
     /// Main entrance
@@ -143,21 +162,23 @@ namespace HGMC
           Thread.Sleep(10);
         }
       });
-
       showThread.Start();
 
-
-      notifyIcon.BalloonTipText = "HGMC运行中..."; //托盘气泡显示内容
-      notifyIcon.Text = "HGMC";
-      notifyIcon.Visible = true; //托盘按钮是否可见
-      notifyIcon.Icon = new System.Drawing.Icon("m.ico"); //托盘中显示的图标
-      notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(notifyIcon_MouseClick);
+      _notifyIcon.BalloonTipText = "HGMC运行中..."; //托盘气泡显示内容
+      _notifyIcon.Text = "HGMC";
+      _notifyIcon.Visible = true; //托盘按钮是否可见
+      _notifyIcon.Icon = new System.Drawing.Icon("m.ico"); //托盘中显示的图标
+      _notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(notifyIcon_MouseClick);
       //notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(notifyIcon_MouseClick);
       var exit = new System.Windows.Forms.MenuItem("关闭");
       exit.Click += new EventHandler(exit_Click);
       var childen = new System.Windows.Forms.MenuItem[] { exit };
-      notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
+      _notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
       this.StateChanged += MainWindow_StateChanged;
+    }
+
+    ~MainWindow()
+    {
     }
 
     /// <summary>
@@ -169,7 +190,7 @@ namespace HGMC
       {
         Dispatcher.BeginInvoke(DispatcherPriority.Background,
           (Action)delegate() { _tcu.SendMsg(HardwareMonitor.UpdateHardware()); });
-        Thread.Sleep(2000);
+        Thread.Sleep(1000);
       }
     }
 
@@ -183,22 +204,17 @@ namespace HGMC
       DragMove();
     }
 
-    private void closeBtn_Click(object sender, RoutedEventArgs e)
-    {
-      // Todo: 
-      Close();
-    }
 
-    NotifyIcon notifyIcon = new NotifyIcon();
+    private readonly NotifyIcon _notifyIcon = new NotifyIcon();
 
     private void minimizeBtn_Click(object sender, RoutedEventArgs e)
     {
       this.Visibility = Visibility.Hidden;
-      notifyIcon.ShowBalloonTip(1000); //托盘气泡显示时间
+      _notifyIcon.ShowBalloonTip(1000); //托盘气泡显示时间
     }
 
     // 退出选项
-    private void exit_Click(object sender, EventArgs e)
+    private static void exit_Click(object sender, EventArgs e)
     {
       if (System.Windows.MessageBox.Show("确定退出吗?",
             "HGMC",
@@ -213,20 +229,18 @@ namespace HGMC
     private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
     {
       //鼠标左键，实现窗体最小化隐藏或显示窗体
-      if (e.Button == MouseButtons.Left)
+      if (e.Button != MouseButtons.Left)
+        return;
+      if (this.Visibility == Visibility.Visible)
       {
-        if (this.Visibility == Visibility.Visible)
-        {
-          this.Visibility = Visibility.Hidden;
-          this.ShowInTaskbar = false;
-        }
-        else
-        {
-          this.Visibility = Visibility.Visible;
-          //解决最小化到任务栏可以强行关闭程序的问题。
-          this.ShowInTaskbar = true;
-          this.Activate();
-        }
+        this.Visibility = Visibility.Hidden;
+        this.ShowInTaskbar = false;
+      }
+      else
+      {
+        this.Visibility = Visibility.Visible;
+        this.ShowInTaskbar = true;
+        this.Activate();
       }
     }
 
@@ -241,29 +255,125 @@ namespace HGMC
 
     private void closeBtn_Click(object sender, EventArgs e)
     {
-      Close();
+      Environment.Exit(0);
     }
 
     bool _flag = false;
+    private Thread _srThread;
 
     private void sr_Click(object sender, RoutedEventArgs e)
     {
-      if (_flag == true)
+      var fh = new JsonPacks.FrameHead();
+      fh.Header = "HgmTCP";
+
+      if (_flag)
       {
-        //ScreenCaptureArea.Visibility = Visibility.Collapsed;
-        _captureThread.Abort();
+        //_captureThread.Abort();
+        _srThread.Abort();
         _flag = false;
-        SwBtn.Content = "开始投屏";
+        SwBtn.Content = "进入投屏";
+
+        fh.DataType = "7";
+        var endTxt = JsonConvert.SerializeObject(fh);
+        _tcu.SendMsg("end");
       }
       else
       {
-        //ScreenCaptureArea.Visibility = Visibility.Visible;
-        _captureThread = new Thread(capture_thread);
-        _captureThread.Start();
+        //_captureThread = new Thread(capture_thread);
+        //_captureThread.Start();
         _flag = true;
-        SwBtn.Content = "关闭投屏";
+        SwBtn.Content = "退出投屏";
+
+        fh.DataType = "6";
+        fh.Data.cf = FmtComboBox.SelectionBoxItem.ToString();
+        var beginTxt = JsonConvert.SerializeObject(fh);
+        _tcu.SendMsg(beginTxt);
+
+        Thread.Sleep(300);
+
+        _srThread = new Thread(sr_thread);
+        _srThread.Start();
       }
     }
+
+    private void sr_thread()
+    {
+      while (true)
+      {
+        var rect = new Rect(0, 0, ScreenWidth, ScreenHeight);
+        _imageBitmap = MyCapture.Capture(rect);
+        _imgMemory = MyCapture.SaveBitMapToMemoryStream(_imageBitmap, _imageFormat, new Size(SrWidth, SrHeight));
+        _imageBitmapSource = _imageBitmap.ToBitmapSource();
+
+        const byte head0 = 0x20;
+        const byte head1 = 0x21;
+        const byte head2 = 0x12;
+
+        byte size0 = (byte)((_imgMemory.Length >> 16) & 0xFF);
+        byte size1 = (byte)((_imgMemory.Length >> 8) & 0xFF);
+        byte size2 = (byte)((_imgMemory.Length >> 0) & 0xFF);
+
+        byte[] src = _imgMemory.GetBuffer();
+        byte[] arr = new byte[_imgMemory.Length + 9];
+
+        /* head */
+        arr[0] = head0;
+        arr[1] = head1;
+        arr[2] = head2;
+
+        /* size */
+        arr[3] = size0;
+        arr[4] = size1;
+        arr[5] = size2;
+
+        for (var i = 0; i < _imgMemory.Length; i++) arr[i + 6] = src[i];
+
+        /* tail */
+        arr[arr.Length - 1] = head0;
+        arr[arr.Length - 2] = head1;
+        arr[arr.Length - 3] = head2;
+
+        Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate() { _tcu.SendMsg(arr, 0, arr.Length); });
+
+        Thread.Sleep(200);
+      }
+    }
+
+
+    private void SwBtn2_OnClick(object sender, RoutedEventArgs e)
+    {
+      var rect = new Rect(0, 0, ScreenWidth, ScreenHeight);
+      _imageBitmap = MyCapture.Capture(rect);
+      _imgMemory = MyCapture.SaveBitMapToMemoryStream(_imageBitmap, _imageFormat, new Size(SrWidth, SrHeight));
+      _imageBitmapSource = _imageBitmap.ToBitmapSource();
+
+      const byte head0 = 0x20;
+      const byte head1 = 0x21;
+      const byte head2 = 0x12;
+
+      byte size0 = (byte)((_imgMemory.Length >> 16) & 0xFF);
+      byte size1 = (byte)((_imgMemory.Length >> 8) & 0xFF);
+      byte size2 = (byte)((_imgMemory.Length >> 0) & 0xFF);
+
+      byte[] src = _imgMemory.GetBuffer();
+      byte[] arr = new byte[_imgMemory.Length + 9];
+
+      arr[0] = head0;
+      arr[1] = head1;
+      arr[2] = head2;
+      arr[3] = size0;
+      arr[4] = size1;
+      arr[5] = size2;
+      for (var i = 0; i < _imgMemory.Length; i++)
+        arr[i + 6] = src[i];
+      arr[arr.Length - 1] = head0;
+      arr[arr.Length - 2] = head1;
+      arr[arr.Length - 3] = head2;
+
+
+      _tcu.SendMsg(arr, 0, arr.Length);
+    }
+
 
     private void HardwareArea_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
@@ -281,32 +391,140 @@ namespace HGMC
         Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
     }
 
+    public static bool HardwareOpenState = false;
+
     private void Monitor_Click(object sender, RoutedEventArgs e)
     {
+      if (!_tcu.Connected())
+      {
+        if (MessageBox.Show("TCP未连接", "TCP未连接", MessageBoxButton.YesNo, MessageBoxImage.Information) ==
+            MessageBoxResult.Yes)
+        {
+        }
+        else
+        {
+        }
+      }
+
       new Thread(() =>
       {
-        Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate()
+        if (Tcuw == null)
         {
-          HardwareMonitor = new HardwareMonitor();
-          var txt = HardwareMonitor.UpdateHardware();
+          HardwareMonitor.Begin();
+          Tcuw = new Thread(update_monitor);
+          Tcuw.Start();
+          Dispatcher.BeginInvoke(DispatcherPriority.Background,
+            (Action)delegate() { MonitorCtlBtn.Content = "停止发送硬件信息"; });
+        }
+        else
+        {
+          HardwareMonitor.End();
+          Tcuw.Abort();
+          Tcuw = null;
+          Dispatcher.BeginInvoke(DispatcherPriority.Background,
+            (Action)delegate() { MonitorCtlBtn.Content = "开始发送硬件信息"; });
+        }
+      })
+      {
+        Priority = ThreadPriority.Lowest
+      }.Start();
+    }
 
-          const string matchTxt = "{\"Header\":\"HgmTCP\",\"DataType\":\"5\",\"Data\":\"match\"}";
-          _tcu.SetServerParams("192.168.213.234", 20);
+
+    private void FmtComboBox_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      var value = FmtComboBox.Text;
+
+      switch (value)
+      {
+        case "JPG":
+          _imageFormat = ImageFormat.Jpeg;
+          break;
+        case "PNG":
+          _imageFormat = ImageFormat.Png;
+          break;
+        case "RAW":
+          // TODO:
+          break;
+      }
+    }
+
+
+    private bool isHGM = false;
+
+    private void HGMMode_OnClick(object sender, RoutedEventArgs e)
+    {
+      if (HGMMode.IsChecked != null)
+        isHGM = (bool)HGMMode.IsChecked;
+    }
+
+    private void TcpConnBtn_OnClick(object sender, RoutedEventArgs e)
+    {
+      var matchTxt = "{\"Header\":\"HgmTCP\",\"DataType\":\"5\",\"Data\":\"match\"}";
+
+
+      if (_tcu.Connected())
+      {
+        _tcu.DisConnect();
+        TcpConnStatus.Text = "(未连接)";
+        TcpConnBtn.Content = "连接";
+        //Tcur.Abort();
+        //Tcur = null;
+      }
+      else
+      {
+        if (Ip0.Text == Empty || Ip1.Text == Empty || Ip2.Text == Empty || Ip3.Text == Empty || Port.Text == Empty)
+        {
+          return;
+        }
+
+        var ip = Ip0.Text + '.' + Ip1.Text + '.' + Ip2.Text + '.' + Ip3.Text;
+        var port = Port.Text;
+        _tcu.SetServerParams(ip, Convert.ToInt16(port));
+
+        TcpConnStatus.Text = "(正在连接)";
+        new Thread(() =>
+        {
           _tcu.Connect();
-          _tcu.SendMsg(matchTxt);
-
-          if (Tcuw == null)
+          if (_tcu.Connected())
           {
-            Tcuw = new Thread(update_monitor);
-            Tcuw.Start();
+            Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate()
+            {
+              TcpConnStatus.Text = "(已连接)";
+              TcpConnBtn.Content = "断开";
+              if ((bool)HGMMode.IsChecked)
+              {
+                _tcu.SendMsg(matchTxt);
+              }
+            });
+
+            // Tcur = new Thread(() =>
+            // {
+            //   Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate() { _tcu.ReceiveMsgThread(); });
+            // });
+            // Tcur.Start();
           }
           else
           {
-            Tcuw.Abort();
-            Tcuw = null;
+            Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate() { TcpConnStatus.Text = "(未连接)"; });
           }
-        });
-      }).Start();
+        }).Start();
+      }
+    }
+
+    private void Sample1_DialogHost_OnDialogClosing(object sender, DialogClosingEventArgs eventargs)
+    {
+      //throw new NotImplementedException();
+    }
+  }
+
+  public class NotEmptyValidationRule : ValidationRule
+  {
+    public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+    {
+      return string.IsNullOrWhiteSpace((value ?? "").ToString())
+        ? new ValidationResult(false, null)
+        : ValidationResult.ValidResult;
     }
   }
 }

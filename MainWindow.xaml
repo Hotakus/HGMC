@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:HGMC"
         mc:Ignorable="d"
-        Title="HGMC by Hotakus" Height="370" Width="650"
+        Title="HGMC by Hotakus" Height="390" Width="670"
         Background="Transparent"
         MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
         ResizeMode="NoResize"
@@ -15,173 +16,403 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True">
 
-    <materialDesign:Card
-        materialDesign:ShadowAssist.ShadowDepth="Depth5">
-        <TabControl
-            Width="650"
-            Style="{StaticResource MaterialDesignNavigatilRailTabControl}">
-            
-            <!--Screenshot-->
-            <TabItem
-                Header="{materialDesign:PackIcon Kind=MonitorScreenshot, Size=35}"
-                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-                <materialDesign:Card
-                    Background="WhiteSmoke">
-                    <Grid ShowGridLines="True">
+    <materialDesign:Card Padding="10" Background="Transparent">
+        <materialDesign:Card
+            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+            materialDesign:ShadowAssist.ShadowEdges="All"
+            UniformCornerRadius="5">
+            <TabControl
+                Width="650"
+                Style="{StaticResource MaterialDesignNavigatilRailTabControl}">
+
+                <!--Screenshot-->
+                <TabItem
+                    Header="{materialDesign:PackIcon Kind=MonitorScreenshot, Size=35}"
+                    Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                    <materialDesign:Card
+                        Background="WhiteSmoke">
+                        <Grid ShowGridLines="false">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" Name="ctlBtnRow" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="1" x:Name="ScreenCaptureArea">
+                                <Image x:Name="ScrCapImg" Height="330" Width="600" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" x:Name="MainCtlArea" Height="Auto" Width="Auto"
+                                        Margin="3"
+                                        Orientation="Horizontal">
+                                <Button x:Name="SwBtn" Click="sr_Click" Width="100">
+                                    进入投屏
+                                </Button>
+                                <Button x:Name="SwBtn2" Width="100" Margin="5 0 0 0">
+                                     
+                                </Button>
+                                <ComboBox SelectedIndex="0"
+                                          x:Name="FmtComboBox"
+                                          materialDesign:HintAssist.Hint="投屏格式" Width="100"
+                                          materialDesign:HintAssist.HelperText="选择要投屏的图像格式"
+                                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          MouseLeftButtonDown="FmtComboBox_OnMouseLeftButtonDown">
+                                    <ComboBoxItem
+                                        Content="JPG" />
+                                    <ComboBoxItem
+                                        Content="PNG" />
+                                    <ComboBoxItem
+                                        Content="RAW" />
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                    </materialDesign:Card>
+                </TabItem>
+
+                <!--Monitor-->
+                <TabItem
+                    Header="{materialDesign:PackIcon Kind=GaugeLow, Size=35}"
+                    Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+
+                    <ScrollViewer Height="350" VerticalScrollBarVisibility="Auto"
+                                  PreviewMouseWheel="HardwareArea_PreviewMouseWheel">
+                        <Grid ShowGridLines="True" Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <materialDesign:Card Grid.Row="0" Grid.Column="0"
+                                                 Margin="10"
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                                 Padding="10"
+                                                 Width="250"
+                                                 Height="140"
+                                                 Background="WhiteSmoke"
+                                                 UniformCornerRadius="10">
+
+                                <TextBlock>
+                                    <Run FontSize="20"
+                                         Text="中央处理器">
+                                    </Run>
+                                    <TextBlock x:Name="CpuName">
+                                        
+                                    </TextBlock>
+                                    <TextBlock x:Name="CpuCores">
+                                        
+                                    </TextBlock>
+                                    <TextBlock x:Name="CpuTemp">
+                                        
+                                    </TextBlock>
+                                    <TextBlock x:Name="CpuLoad">
+                                        
+                                    </TextBlock>
+                                </TextBlock>
+                            </materialDesign:Card>
+
+                            <materialDesign:Card Grid.Row="0" Grid.Column="1"
+                                                 Margin="10"
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                                 Padding="10"
+                                                 Width="250"
+                                                 Height="140"
+                                                 Background="WhiteSmoke"
+                                                 UniformCornerRadius="10">
+
+                                <TextBlock>
+                                    <Run FontSize="20"
+                                         Text="图形处理器">
+                                    </Run>
+
+                                </TextBlock>
+                            </materialDesign:Card>
+
+                            <materialDesign:Card Grid.Row="1" Grid.Column="0"
+                                                 Margin="10"
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                                 Padding="10"
+                                                 Width="250"
+                                                 Height="140"
+                                                 Background="WhiteSmoke"
+                                                 UniformCornerRadius="10">
+
+                                <TextBlock>
+                                    <Run FontSize="20"
+                                         Text="内存">
+                                    </Run>
+
+                                </TextBlock>
+                            </materialDesign:Card>
+
+                            <materialDesign:Card Grid.Row="1" Grid.Column="1"
+                                                 Margin="10"
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                                 Padding="10"
+                                                 Width="250"
+                                                 Height="140"
+                                                 Background="WhiteSmoke"
+                                                 UniformCornerRadius="10">
+
+                                <TextBlock>
+                                    <Run FontSize="20"
+                                         Text="网络">
+                                    </Run>
+
+                                </TextBlock>
+                            </materialDesign:Card>
+
+                            <materialDesign:Card Grid.Row="2" Grid.Column="0"
+                                                 Margin="10"
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                                 Padding="10"
+                                                 Width="250"
+                                                 Height="140"
+                                                 Background="WhiteSmoke"
+                                                 UniformCornerRadius="10">
+
+                                <TextBlock>
+                                    <Run FontSize="20"
+                                         Text="硬盘">
+                                    </Run>
+
+                                </TextBlock>
+                            </materialDesign:Card>
+
+                            <materialDesign:Card Grid.Row="2" Grid.Column="1"
+                                                 Margin="10"
+                                                 materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                                 Padding="10"
+                                                 Width="250"
+                                                 Height="140"
+                                                 Background="WhiteSmoke"
+                                                 UniformCornerRadius="10">
+
+                                <TextBlock>
+                                    <Run FontSize="20"
+                                         Text="控制面板">
+                                    </Run>
+                                    <LineBreak />
+                                    <Button x:Name="MonitorCtlBtn"
+                                            Click="Monitor_Click"
+                                            Margin="0 5 0 0">
+                                        开始发送硬件数据
+                                    </Button>
+                                </TextBlock>
+                            </materialDesign:Card>
+
+                        </Grid>
+                    </ScrollViewer>
+
+                </TabItem>
+
+                <!--Setting-->
+                <TabItem
+                    Header="{materialDesign:PackIcon Kind=Cog, Size=35}"
+                    Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                    <Grid ShowGridLines="True" Margin="5">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" Name="ctlBtnRow" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Row="1" x:Name="ScreenCaptureArea">
-                            <Image x:Name="ScrCapImg" Height="343" Width="610" HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                        </StackPanel>
+                        <!--TCP-->
+                        <materialDesign:Card Grid.Row="0" Grid.Column="0"
+                                             Margin="10"
+                                             materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                             Padding="10"
+                                             Width="260"
+                                             Height="150"
+                                             Background="WhiteSmoke"
+                                             UniformCornerRadius="10">
+                            <TextBlock>
+                                <StackPanel>
+                                    <TextBlock>
+                                        <Run FontSize="20"
+                                             Text="TCP接入服务器">
+                                        </Run>
+                                        <TextBlock FontSize="20" x:Name="TcpConnStatus">
+                                            (未连接)
+                                        </TextBlock>
+                                    </TextBlock>
 
-                        <StackPanel Grid.Row="2" x:Name="MainCtlArea" Height="30" Width="Auto"
-                                    Orientation="Horizontal">
-                            <Button x:Name="SwBtn" Click="sr_Click">开始投屏</Button>
-                        </StackPanel>
+                                    <StackPanel Margin="5 5 10 5"
+                                                Orientation="Horizontal">
+                                        <TextBlock Width="Auto"
+                                                   Text="主机IP:"
+                                                   Margin="0 0 5 0"
+                                                   VerticalAlignment="Bottom"
+                                                   FontSize="15" />
+                                        <TextBox Width="40"
+                                                 x:Name="Ip0"
+                                                 MaxLength="3"
+                                                 HorizontalContentAlignment="Center"
+                                                 materialDesign:HintAssist.Hint="192"
+                                                 Margin="0 0 0 0"
+                                                 VerticalAlignment="Bottom"
+                                                 Text="192" />
+                                        <TextBox Width="40"
+                                                 x:Name="Ip1"
+                                                 MaxLength="3"
+                                                 HorizontalContentAlignment="Center"
+                                                 materialDesign:HintAssist.Hint="168"
+                                                 Margin="5 0 0 0"
+                                                 VerticalAlignment="Bottom"
+                                                 Text="168" />
+                                        <TextBox Width="40"
+                                                 x:Name="Ip2"
+                                                 MaxLength="3"
+                                                 HorizontalContentAlignment="Center"
+                                                 materialDesign:HintAssist.Hint="xxx"
+                                                 Margin="5 0 0 0"
+                                                 VerticalAlignment="Bottom"
+                                                 Text="91" />
+                                        <TextBox Width="40"
+                                                 x:Name="Ip3"
+                                                 MaxLength="3"
+                                                 HorizontalContentAlignment="Center"
+                                                 materialDesign:HintAssist.Hint="xxx"
+                                                 Margin="5 0 0 0"
+                                                 VerticalAlignment="Bottom"
+                                                 Text="234" />
+                                    </StackPanel>
+
+                                    <StackPanel Margin="5 0 0 10"
+                                                Orientation="Horizontal">
+                                        <TextBlock Width="Auto"
+                                                   Text="主机端口:"
+                                                   Margin="0 0 10 0"
+                                                   VerticalAlignment="Bottom"
+                                                   FontSize="15" />
+
+                                        <TextBox Width="40"
+                                                 x:Name="Port"
+                                                 HorizontalContentAlignment="Center"
+                                                 materialDesign:HintAssist.Hint="20"
+                                                 Margin="0 0 20 0"
+                                                 VerticalAlignment="Bottom">
+                                            20
+                                        </TextBox>
+
+                                        <CheckBox
+                                            x:Name="HGMMode"
+                                            Click="HGMMode_OnClick"
+                                            Content="HGM模式"
+                                            IsChecked="True" />
+                                    </StackPanel>
+
+                                    <Button x:Name="TcpConnBtn" Click="TcpConnBtn_OnClick">
+                                        接入
+                                    </Button>
+                                </StackPanel>
+
+                            </TextBlock>
+                        </materialDesign:Card>
                     </Grid>
-                </materialDesign:Card>
-            </TabItem>
+                </TabItem>
 
-            <!--Monitor-->
-            <TabItem
-                Header="{materialDesign:PackIcon Kind=GaugeLow, Size=35}"
-                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-                <TextBlock x:Name="testt">
-                    <Run
-                        Text="tab 2 content. Default look and behaviors." />
-                    <LineBreak />
-                    <LineBreak />
-                    <Run
-                        FontStyle="Italic">
-                        Praesent sed dui arcu. Vivamus porta auctor sagittis
-                    </Run>
+                <!--Helper-->
+                <TabItem
+                    Header="{materialDesign:PackIcon Kind=InformationVariant, Size=35}"
+                    Style="{StaticResource MaterialDesignNavigationRailTabItem}">
 
-                    <Button x:Name="Monitor" Click="Monitor_Click">开始投屏</Button>
-                </TextBlock>
-            </TabItem>
-
-            <!--Setting-->
-            <TabItem
-                Header="{materialDesign:PackIcon Kind=Cog, Size=35}"
-                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-                
-                <materialDesign:Card
-                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
-                    Padding="32"
-                    >
-                    
-                    <TextBlock>
-                        <Run
-                            Text="tab 2 content. Default look and behaviors." />
-                        <LineBreak />
-                        <LineBreak />
-                        <Run
-                            FontStyle="Italic">
-                            Praesent sed dui arcu. Vivamus porta auctor sagittis
-                        </Run>
-
-                        <Button  Click="Monitor_Click">开始投屏</Button>
-                    </TextBlock>
-                    
-                </materialDesign:Card>
-
-            </TabItem>
-
-            <!--Helper-->
-            <TabItem
-                Header="{materialDesign:PackIcon Kind=InformationVariant, Size=35}"
-                Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-
-                <ScrollViewer Height="350" x:Name="HardwareArea" VerticalScrollBarVisibility="Auto"
-                              PreviewMouseWheel="HardwareArea_PreviewMouseWheel">
-                    <StackPanel Margin="10 10 10 10">
-                        <TextBlock>
-                            <Run FontSize="30"
-                                 Text="项目信息" />
-                            <LineBreak />
-                        </TextBlock>
-
-                        <TextBlock>
-                            <Run FontSize="15"
-                                 Text="项目地址：" />
-                            <TextBlock FontSize="15">
-                                <Hyperlink NavigateUri="https://github.com/Hotakus/HGMC"
-                                           Click="Hyperlink_Click">
-                                    https://github.com/Hotakus/HGMC
-                                </Hyperlink>
-                            </TextBlock>
-                            <LineBreak></LineBreak>
-                        </TextBlock>
-
-                        <TextBlock>
-                            <Run FontSize="20"
-                                 Text="项目使用介绍：" />
-                            <LineBreak />
-
-                            <TextBlock FontSize="15">
-                                看到左侧的导航栏，有五个按钮，其中，从上到下第一个投屏按钮；
+                    <ScrollViewer Height="350" x:Name="HardwareArea" VerticalScrollBarVisibility="Auto"
+                                  PreviewMouseWheel="HardwareArea_PreviewMouseWheel">
+                        <StackPanel Margin="10 10 10 10">
+                            <TextBlock>
+                                <Run FontSize="30"
+                                     Text="项目信息" />
                                 <LineBreak />
-                                第二个是硬件监控按钮；
-                                <LineBreak />
-                                第三个是设置按钮，可以用来设置如HGM的IP地址、端口等；
-                                <LineBreak />
-                                第四个是额外信息，即本界面；
-                                <LineBreak />
-                                最后一个是功能按钮，
-                                右单击时最小化到托盘，左单击时退出软件。
-                                <LineBreak />
-                                <LineBreak />
-                                使用项目时，要先进入设置界面进行配置和连接，连接成功后
-                                <LineBreak />
-                                才能使用“硬件监控功能”和“投屏功能”
-                                <LineBreak />
-                                <LineBreak />
-                                若HGM在Misc界面时（就是显示天气和时间和B站信息的界面），因为
-                                <LineBreak />
-                                单片机硬件资源有限， 为了项目的正常运行，TCP连接会断开以腾出更多资源，
-                                <LineBreak />
-                                即当HGM打开Misc界面后，若想使用“硬件监控功能”和“投屏功能”，则需要进入
-                                <LineBreak />
-                                设置界面重新连接HGM。
                             </TextBlock>
 
-                            <LineBreak />
-                            <LineBreak />
-
-                            <Run FontSize="15"
-                                 Text="我的Github：" />
-                            <TextBlock FontSize="15">
-                                <Hyperlink NavigateUri="https://github.com/Hotakus"
-                                           Click="Hyperlink_Click">
-                                    https://github.com/Hotakus
-                                </Hyperlink>
-                            </TextBlock>
-                            <LineBreak />
-                            <Run FontSize="15"
-                                 Text="我的邮箱：" />
-                            <TextBlock FontSize="15">
-                                hotakus@foxmail.com
+                            <TextBlock>
+                                <Run FontSize="15"
+                                     Text="项目地址：" />
+                                <TextBlock FontSize="15">
+                                    <Hyperlink NavigateUri="https://github.com/Hotakus/HGMC"
+                                               Click="Hyperlink_Click">
+                                        https://github.com/Hotakus/HGMC
+                                    </Hyperlink>
+                                </TextBlock>
+                                <LineBreak></LineBreak>
                             </TextBlock>
 
-                        </TextBlock>
-                    </StackPanel>
-                </ScrollViewer>
-            </TabItem>
+                            <TextBlock>
+                                <Run FontSize="20"
+                                     Text="项目使用介绍：" />
+                                <LineBreak />
 
-            <!--Function-->
-            <TabItem PreviewMouseLeftButtonDown="closeBtn_Click"
-                     MouseRightButtonDown="minimizeBtn_Click"
-                     Header="{materialDesign:PackIcon Kind=ExitRun, Size=35}"
-                     Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-            </TabItem>
-        </TabControl>
+                                <TextBlock FontSize="15">
+                                    看到左侧的导航栏，有五个按钮，其中，从上到下第一个投屏按钮；
+                                    <LineBreak />
+                                    第二个是硬件监控按钮；
+                                    <LineBreak />
+                                    第三个是设置按钮，可以用来设置如HGM的IP地址、端口等；
+                                    <LineBreak />
+                                    第四个是额外信息，即本界面；
+                                    <LineBreak />
+                                    最后一个是功能按钮，
+                                    右单击时最小化到托盘，左单击时退出软件。
+                                    <LineBreak />
+                                    <LineBreak />
+                                    使用项目时，要先进入设置界面进行配置和连接，连接成功后
+                                    <LineBreak />
+                                    才能使用“硬件监控功能”和“投屏功能”
+                                    <LineBreak />
+                                    <LineBreak />
+                                    若HGM在Misc界面时（就是显示天气和时间和B站信息的界面），因为
+                                    <LineBreak />
+                                    单片机硬件资源有限， 为了项目的正常运行，TCP连接会断开以腾出更多资源，
+                                    <LineBreak />
+                                    即当HGM打开Misc界面后，若想使用“硬件监控功能”和“投屏功能”，则需要进入
+                                    <LineBreak />
+                                    设置界面重新连接HGM。
+                                </TextBlock>
+
+                                <LineBreak />
+                                <LineBreak />
+
+                                <Run FontSize="15"
+                                     Text="我的Github：" />
+                                <TextBlock FontSize="15">
+                                    <Hyperlink NavigateUri="https://github.com/Hotakus"
+                                               Click="Hyperlink_Click">
+                                        https://github.com/Hotakus
+                                    </Hyperlink>
+                                </TextBlock>
+                                <LineBreak />
+                                <Run FontSize="15"
+                                     Text="我的邮箱：" />
+                                <TextBlock FontSize="15" x:Name="testte" TextWrapping="Wrap">
+                                    hotakus@foxmail.com
+                                </TextBlock>
+
+                            </TextBlock>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!--Function-->
+                <TabItem PreviewMouseLeftButtonDown="closeBtn_Click"
+                         MouseRightButtonDown="minimizeBtn_Click"
+                         Header="{materialDesign:PackIcon Kind=ExitRun, Size=35}"
+                         Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+                </TabItem>
+            </TabControl>
+        </materialDesign:Card>
     </materialDesign:Card>
-
 
 </Window>

@@ -18,6 +18,7 @@ namespace HGMC.Source.TCP
     private BinaryReader _binaryReader;
     private BinaryWriter _binaryWriter;
     private bool _released = true;
+    private bool _connected = false;
 
     private readonly List<string> _msgQueue = new List<string>();
 
@@ -39,7 +40,7 @@ namespace HGMC.Source.TCP
       _port = port;
     }
 
-    public bool Connected() => _tcpClient.Connected;
+    public bool Connected() => _connected;
     public bool Available() => _tcpClient.Available > 0;
     public int MsgCount() => _msgQueue.Count;
 
@@ -55,23 +56,24 @@ namespace HGMC.Source.TCP
 
         _tcpClient = new TcpClient(_serverIp, _port);
 
-        Thread.Sleep(100);
+        Thread.Sleep(1000);
 
-        if (Connected())
+        if (_tcpClient.Connected)
         {
           _binaryReader = new BinaryReader(_tcpClient.GetStream());
           _binaryWriter = new BinaryWriter(_tcpClient.GetStream());
 
           _released = false;
+          _connected = true;
+          return true;
         }
+        return false;
       }
       catch (Exception e)
       {
         Console.WriteLine(e);
         return false;
       }
-
-      return true;
     }
 
     public bool DisConnect()
@@ -82,10 +84,11 @@ namespace HGMC.Source.TCP
       {
         _tcpClient.Close();
 
-        if (!Connected())
+        if (!_tcpClient.Connected)
         {
           Console.WriteLine("TCP Client closed.");
           _released = true;
+          _connected = false;
         }
       }
       catch (Exception e)
@@ -114,6 +117,24 @@ namespace HGMC.Source.TCP
 
       return true;
     }
+    
+    public bool SendMsg(byte[] msg, int index, int count)
+    {
+      if (this.Connected() == false)
+        return false;
+
+      try
+      {
+        _binaryWriter?.Write(msg, index, count);
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        return false;
+      }
+
+      return true;
+    }
 
     public void ReceiveMsgThread()
     {
@@ -127,10 +148,10 @@ namespace HGMC.Source.TCP
         }
 
         ReceiveMsg();
-        if (MsgCount() != 0)
-        {
-          Console.WriteLine(GetMsg());
-        }
+        // if (MsgCount() != 0)
+        // {
+        //   Console.WriteLine(GetMsg());
+        // }
 
         Thread.Sleep(10);
       }
